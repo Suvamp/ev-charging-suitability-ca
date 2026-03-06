@@ -1,0 +1,24 @@
+name: ev_suitability
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - geopandas
+  - pandas
+  - numpy
+  - matplotlib
+  - libpysal
+  - esda
+  - mgwr
+  - osmnx
+  - contextily
+  - scikit-learn
+  - folium
+  - branca
+  - requests
+  - tqdm
+  - pyarrow
+  - shapely
+  - jupyterlab
+  - ipykernel
