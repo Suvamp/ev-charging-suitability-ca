@@ -1,0 +1,19 @@
+# Cache and large data files
+outputs/afdc_stations.parquet
+outputs/ca_zctas.parquet
+outputs/ca_census_acs.csv
+outputs/ev_registrations.csv
+outputs/highway_dist.parquet
+outputs/osm_ca_features.parquet
+outputs/ca_boundary.parquet
+outputs/zcta_tiger/
+outputs/ca_state_tiger/
+outputs/osm_counties/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
