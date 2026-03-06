@@ -24,6 +24,14 @@ A data-driven site suitability model identifying the highest-priority locations 
 
 ---
 
+## Interactive Map
+
+The full interactive suitability map (MCE scores, gap zones, existing stations, top-20 candidates) is best viewed via nbviewer:
+
+**[View Interactive Map & Full Notebook](https://nbviewer.org/github/Suvamp/ev-charging-suitability-ca/blob/main/EV_Station_Suitability_Analysis.ipynb)**
+
+---
+
 ## Top 20 Candidate Sites
 
 Sites ranked by MCE composite suitability score. All are confirmed gap zones (>8 km from nearest charger cluster) with meaningful population.
