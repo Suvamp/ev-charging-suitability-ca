@@ -1,6 +1,5 @@
 # EV Charging Station Site Suitability Analysis — California
 
-**GIS Data Science Portfolio | Project 02**
 
 A data-driven site suitability model identifying the highest-priority locations for new public EV charging stations in California. Integrates live federal station data, Census demographics, and spatial machine learning into a reproducible six-stage analytical pipeline across **2,007 ZIP Code Tabulation Areas (ZCTAs)**.
 
