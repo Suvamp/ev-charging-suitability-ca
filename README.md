@@ -1,4 +1,4 @@
-# ⚡ EV Charging Station Site Suitability Analysis — California
+# EV Charging Station Site Suitability Analysis — California
 
 **GIS Data Science Portfolio | Project 02**
 
