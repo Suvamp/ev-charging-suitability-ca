@@ -19,3 +19,8 @@ __pycache__/
 .DS_Store
 outputs/06_ev_suitability_map.html
 docs/
+Project02_EV_Suitability_Colab.ipynb
+Project02_StepByStep_Guide.docx
+Project02_StepByStep_Guide.pdf
+cache/
+outputs/ca_zcta_tiger/
