@@ -52,13 +52,13 @@ A data-driven site suitability model identifying the highest-priority locations 
 
 ### MCE Suitability Score
 ![MCE Suitability](outputs/04_mce_suitability.png)
-*Composite suitability score (0–1) weighted across five criteria: EV registrations (0.35), population density (0.20), commute workers (0.20), median income (0.15), and charger gap score (0.10). Darker green = higher priority for new infrastructure. Black dots = existing stations. High-scoring ZCTAs in the Central Valley and Inland Empire represent the most actionable investment targets.*
+*Composite suitability score (0–1) weighted across eight criteria: EV registrations (0.30), population density (0.15), median income (0.10), commute workers (0.15), highway access (0.10), retail POI density (0.10), charger gap score (0.05), and grid capacity (0.05, a highway-proximity proxy). Darker green = higher priority for new infrastructure. Black dots = existing stations. High-scoring ZCTAs in the Central Valley and Inland Empire represent the most actionable investment targets.*
 
 ---
 
 ### GWR Local Coefficient Maps
 ![GWR Coefficients](outputs/05_gwr_coefficients.png)
-*Each map shows how the relationship between a demand driver and EV registrations varies spatially. Green = positive coefficient (feature drives EV demand locally), red = negative. Key findings: commute workers show a consistently positive effect statewide; income has a stronger positive effect in coastal metros than inland CA; population density has a mixed signal in dense urban cores where congestion may suppress EV adoption.*
+*Each map shows how the relationship between a demand driver and EV registrations varies spatially. Green = positive coefficient (feature drives EV demand locally), red = negative. `retail_poi_density` and `charger_gap_score` were dropped before fitting (near-zero variance in the regression subsample); the model retains population density, median income, commute workers, and highway access. Key findings: commute workers show a consistently positive effect statewide; income has a stronger positive effect in coastal metros than inland CA; population density has a mixed signal in dense urban cores where congestion may suppress EV adoption; highway access is the strongest driver in inland corridor ZCTAs, consistent with unmet Interstate fast-charging demand.*
 
 ---
 
@@ -142,11 +142,14 @@ Using DBSCAN *inversely* — clustering existing stations to define coverage zon
 
 | Criterion | Weight | Rationale |
 |-----------|--------|-----------|
-| EV Registrations | 0.35 | Most direct signal of where EVs are |
-| Population Density | 0.20 | Concentration of potential users |
-| Commute Workers | 0.20 | Workplace charging demand proxy |
-| Median Income | 0.15 | Purchasing power / adoption likelihood |
-| Charger Gap Score | 0.10 | Inverse of existing coverage |
+| EV Registrations | 0.30 | Most direct signal of where EVs are |
+| Population Density | 0.15 | Concentration of potential users |
+| Commute Workers | 0.15 | Workplace charging demand proxy |
+| Highway Access | 0.10 | Interstate proximity, for corridor charging |
+| Retail POI Density | 0.10 | Dwell-time locations (shopping, dining) where drivers charge while parked |
+| Median Income | 0.10 | Purchasing power / adoption likelihood |
+| Charger Gap Score | 0.05 | Inverse of existing coverage |
+| Grid Capacity | 0.05 | Utility grid proximity (cost proxy) — approximated with the same highway-proximity feature as Highway Access above, so effective highway weight is 0.15 |
 
 ### Stage 5 — Moran's I Diagnostic
 - Global OLS R² = 0.9100
@@ -158,8 +161,10 @@ Using DBSCAN *inversely* — clustering existing stations to define coverage zon
 - **Kernel**: bisquare adaptive
 - **GWR R²**: 0.9777 · **Adjusted R²**: 0.9714
 - **Local R² range**: 0.839 – 0.996 · **Mean**: 0.961
+- Model retains 4 of 6 candidate features (`retail_poi_density` and `charger_gap_score` dropped for near-zero variance): population density, median income, commute workers, highway access
 - Commute workers show the most consistent positive effect statewide
 - Income effect strongest in coastal metros, weaker in inland CA
+- Highway access is the strongest driver in inland corridor ZCTAs
 
 ---
 
@@ -229,8 +234,9 @@ Get a free NREL API key at [developer.nrel.gov/signup](https://developer.nrel.go
 
 ## Limitations
 
-- OSM highway features excluded due to state-level query performance constraints; highway access proxied through cached distances where available
-- EV registration data sourced from CA DMV Open Data; falls back to income-based proxy if API is unavailable
+- `retail_poi_density` and `charger_gap_score` are included in the MCE score but dropped from the GWR model (near-zero variance in the regression subsample), so the coefficient maps show only 4 of the 8 MCE criteria
+- `grid_capacity` is not an independent signal — it reuses the `highway_access` feature as a cost proxy, effectively double-weighting highway proximity in the MCE score
+- EV registration data sourced from CA DMV Open Data; falls back to an income-based proxy if the API is unavailable
 - ZCTAs do not perfectly align with administrative boundaries; some gap zones near county borders may have coverage from adjacent ZCTAs not captured in the model
 - GWR bandwidth of 52 neighbours produces highly local models; results in sparse rural areas should be interpreted cautiously
 
